@@ -36,6 +36,9 @@ class PlivoAlert(AlertPlugin):
 		t = Template(plivo_template)
 		msg = t.render(c)
 
+		# get the source number
+		src_number = env.get('PLIVO_OUTGOING_NUMBER')
+
 		# get users's plivo mobile numbers
 		plivo_numbers = [u.mobile_number for u in PlivoAlertUserData.objects.filter(user__user__in=users)]
 
@@ -43,7 +46,7 @@ class PlivoAlert(AlertPlugin):
 		try:
 			for plivo_number in plivo_numbers:
 				send_response = plivoClient.Message.send(
-					src='441233801333',
+					src=src_number,
 					dst=plivo_number,
 					text=msg,
 					url='http://localhost.com',
