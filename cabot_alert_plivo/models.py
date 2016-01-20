@@ -31,7 +31,7 @@ class PlivoAlert(AlertPlugin):
             'host': settings.WWW_HTTP_HOST,
             'scheme': settings.WWW_SCHEME
         })
-		t = Template(email_template)
+		t = Template(plivo_template)
 		msg = t.render(c)
 		send_response = plivoClient.Message.send(
 			src='441233801333',
