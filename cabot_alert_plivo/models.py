@@ -3,7 +3,7 @@ from os import environ as env
 from django.conf import settings
 from django.template import Context, Template
 
-from cabot.cabotapp.alert import AlertPlugin
+from cabot.cabotapp.alert import AlertPlugin, AlertPluginUserData
 
 import requests
 import logging
