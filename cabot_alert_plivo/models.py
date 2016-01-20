@@ -35,10 +35,22 @@ class PlivoAlert(AlertPlugin):
 		t = Template(plivo_template)
 		msg = t.render(c)
 
+		# get users's plivo mobile numbers
+		plivo_numbers = [u.mobile_number for u in PlivoAlertUserData.objects.filter(user__user__in=users)]
+
 		# send SMS using Plivo Python API
-		send_response = plivoClient.Message.send(
-			src='441233801333',
-			dst='447482254604',
-			text=msg,
-			url='http://localhost.com',
-		)
+		try:
+			for plivo_number in plivo_numbers:
+				send_response = plivoClient.Message.send(
+					src='441233801333',
+					dst=plivo_number,
+					text=msg,
+					url='http://localhost.com',
+				)
+		except Exception, exp:
+			logger.exception('Error invoking Plivo SMS: %s' % str(exp))
+
+
+class PlivoAlertUserData(AlertPluginUserData):
+	name = "Pluvio Plugin"
+	mobile_number = models.CharField(max_length=20, blank=True, default='')
