@@ -26,13 +26,12 @@ class PlivoAlert(AlertPlugin):
 	author = "Razvan Pistolea"
 
 	def send_alert(self, service, users, duty_officers):
-
 		# create message
 		c = Context({
-            'service': service,
-            'host': settings.WWW_HTTP_HOST,
-            'scheme': settings.WWW_SCHEME
-        })
+			'service': service,
+			'host': settings.WWW_HTTP_HOST,
+			'scheme': settings.WWW_SCHEME
+		})
 		t = Template(plivo_template)
 		msg = t.render(c)
 
@@ -41,4 +40,5 @@ class PlivoAlert(AlertPlugin):
 			src='441233801333',
 			dst='447482254604',
 			text=msg,
+			url='http://localhost.com',
 		)
