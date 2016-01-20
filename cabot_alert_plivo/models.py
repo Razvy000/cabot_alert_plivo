@@ -12,9 +12,9 @@ import logging
 
 import plivo
 
-auth_id = 'MANZC3MZK0MDY2NTZLYT'
-auth_token = 'ZTU0ZDAxMGNjNWYzNjA3NzIwNmUyZTQ3NjVmYmRl'
-
+# get the environment variables (see cabot/conf/development.env)
+auth_id = env.get('PLIVO_AUTH_ID')
+auth_token = env.get('PLIVO_AUTH_TOKEN')
 plivoClient = plivo.RestAPI(auth_id, auth_token)
 
 plivo_template = "Service {{ service.name }} {% if service.overall_status == service.PASSING_STATUS %}is back to normal{% else %}reporting {{ service.overall_status }} status{% endif %}: {{ scheme }}://{{ host }}{% url 'service' pk=service.id %}. {% if service.overall_status != service.PASSING_STATUS %}Checks failing: {% for check in service.all_failing_checks %}{% if check.check_category == 'Jenkins check' %}{% if check.last_result.error %} {{ check.name }} ({{ check.last_result.error|safe }}) {{jenkins_api}}job/{{ check.name }}/{{ check.last_result.job_number }}/console{% else %} {{ check.name }} {{jenkins_api}}/job/{{ check.name }}/{{check.last_result.job_number}}/console {% endif %}{% else %} {{ check.name }} {% if check.last_result.error %} ({{ check.last_result.error|safe }}){% endif %}{% endif %}{% endfor %}{% endif %}{% if alert %}{% for alias in users %} @{{ alias }}{% endfor %}{% endif %}Raz"
